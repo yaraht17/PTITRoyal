@@ -1,0 +1,38 @@
+<resources>
+    <string name="app_name">PTIT Royal</string>
+
+
+     <string name="gcm_send_message">Token retrieved and sent to server! You can now use gcmsender to
+        send downstream messages to this app.</string>
+    <string name="registering_message">Generating InstanceID token...</string>
+    <string name="token_error_message">An error occurred while either fetching the InstanceID token,
+        sending the fetched token to the server or subscribing to the PubSub topic. Please try
+        running the sample again.</string>
+
+
+    <string name="gcm_sender_id">245852810764</string>
+    <string name="facebook_app_id">520091714823731</string>
+
+    <string name="icon_search">&#xf002;</string>
+    <string name="icon_toggle">&#xf0c9;</string>
+    <string name="icon_notif">&#xf0f3;</string>
+    <string name="icon_back">&#xf053;</string>
+    <string name="icon_logout">&#xf08b;</string>
+    <string name="icon_sub">&#xf147;</string>
+    <string name="icon_plus">&#xf067;</string>
+    <string name="icon_settings">&#xf013;</string>
+    <string name="icon_edit">&#xf044;</string>
+    <string name="icon_arrow">&#xf061;</string>
+
+    <string name="like">Thích</string>
+    <string name="comment">Bình luận</string>
+    <string name="reply">Trả lời</string>
+    <string name="user_name">Username</string>
+    <string name="request_error">Xảy ra lỗi, vui lòng thử lại!</string>
+
+    <string-array name="hashtag_array">
+        <item>Giải Trí</item>
+        <item>Ăn Uống</item>
+        <item>Học Tập</item>
+    </string-array>
+</resources>
