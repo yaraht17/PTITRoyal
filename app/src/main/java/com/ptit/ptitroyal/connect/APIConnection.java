@@ -9,20 +9,49 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
 import com.ptit.ptitroyal.MainActivity;
 import com.ptit.ptitroyal.data.Constants;
-import com.ptit.ptitroyal.models.Noti;
 import com.ptit.ptitroyal.models.PostContent;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.util.ArrayList;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.Map;
 
 public class APIConnection {
+
+    private static final String API_CHAT = "http://52.25.229.209:8080/AIML/chat?question=";
+
+    public static void getChatMessage(Context context, String message, final StringRequestListener callback) throws UnsupportedEncodingException {
+
+        StringRequest request = new StringRequest
+                (Request.Method.GET, API_CHAT + URLEncoder.encode(message, "utf-8"), new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        Log.d("TienDH", "res chat: " + response);
+                        callback.onSuccess(response);
+                    }
+
+                }, new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        Log.d("TienDH", "Res Error" + error.toString());
+                        callback.onError(error);
+                    }
+                }) {
+            @Override
+            public Map<String, String> getHeaders() throws AuthFailureError {
+                HashMap<String, String> headers = new HashMap<String, String>();
+                headers.put("charset", "utf-8");
+                return headers;
+            }
+        };
+        MySingleton.getInstance(context).addToRequestQueue(request);
+    }
 
     public static void login(Context context, final String facebookToken, final JSONObjectRequestListener callback) {
 
@@ -68,22 +97,23 @@ public class APIConnection {
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        callback.onSuccess(response);
                         Log.d("TienDH", "Respone Request Success: " + response.toString());
+                        callback.onSuccess(response);
+
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
-                        callback.onError(error);
                         Log.d("TienDH", "Respone Request Error: " + error.toString());
+                        callback.onError(error);
+
                     }
                 }) {
             @Override
             public Map getHeaders() throws AuthFailureError {
                 Map headers = new HashMap();
                 headers.put("Authorization", "access_token " + accessToken);
-                headers.put("Content-Type", "application/json");
                 return headers;
             }
         };
@@ -161,12 +191,14 @@ public class APIConnection {
 
                     @Override
                     public void onResponse(JSONObject response) {
+                        Log.d("TienDH", "Response: " + response.toString());
                         callback.onSuccess(response);
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Log.d("TienDH", "Error: " + error.toString());
                         callback.onError(error);
                     }
                 }) {
@@ -187,12 +219,14 @@ public class APIConnection {
 
                     @Override
                     public void onResponse(JSONObject response) {
+                        Log.d("TienDH", "Response: " + response.toString());
                         callback.onSuccess(response);
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Log.d("TienDH", "Error: " + error.toString());
                         callback.onError(error);
                     }
                 }) {
@@ -212,12 +246,14 @@ public class APIConnection {
 
                     @Override
                     public void onResponse(JSONObject response) {
+                        Log.d("TienDH", "Response: " + response.toString());
                         callback.onSuccess(response);
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
+                        Log.d("TienDH", "Error: " + error.toString());
                         callback.onError(error);
                     }
                 }) {
@@ -237,6 +273,7 @@ public class APIConnection {
 
                     @Override
                     public void onResponse(JSONObject response) {
+                        Log.d("TienDH", "get Noti: " + response);
                         callback.onSuccess(response);
                     }
                 }, new Response.ErrorListener() {
@@ -256,7 +293,6 @@ public class APIConnection {
         };
         MySingleton.getInstance(context).addToRequestQueue(jsObjRequest);
     }
-
 
 
     public static void makeNotiRead(Context context, String url, final String accessToken, final VolleyCallback callback) {
@@ -289,7 +325,9 @@ public class APIConnection {
     public static void doPostStatus(Context context, PostContent postContent, final String accessToken, final VolleyCallback callback) throws JSONException {
         final JSONObject jsonBody = new JSONObject();
         jsonBody.put(Constants.CONTENT, postContent.getContent());
-        jsonBody.put(Constants.IMAGE_UPLOAD, postContent.getImage());
+        if (!postContent.getImage().equals("")) {
+            jsonBody.put(Constants.IMAGE_UPLOAD, postContent.getImage());
+        }
         String url = Constants.DO_POST_STATUS;
         url = url.replace(Constants.POST_ID_TOPIC_REPLACE, postContent.getTopic());
         JsonObjectRequest jsObjRequest = new JsonObjectRequest

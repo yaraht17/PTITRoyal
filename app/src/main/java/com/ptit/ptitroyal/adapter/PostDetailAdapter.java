@@ -19,6 +19,7 @@ import com.ptit.ptitroyal.data.Constants;
 import com.ptit.ptitroyal.models.Author;
 import com.ptit.ptitroyal.models.Comment;
 import com.ptit.ptitroyal.models.Post;
+import com.ptit.ptitroyal.view.AwesomeTextView;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -37,6 +38,7 @@ public class PostDetailAdapter extends BaseAdapter {
     private LayoutInflater inflater;
     private ImageView imgLike;
     private TextView tvNumOfLikes;
+    private AwesomeTextView txtTopic;
 
     static class ViewHolder {
         public TextView tvCommentUsername, tvReplyTo, tvCommentContent, tvCommentTime;
@@ -84,8 +86,13 @@ public class PostDetailAdapter extends BaseAdapter {
         }
     }
 
+    public void setPost(Post post) {
+        this.post = post;
+    }
+
     private void getPostView(View convertView) {
         TextView tvUsername, tvTimePost, tvContent, tvNumOfCmts;
+
         ImageView imgAvatar, imgContent, imgComment;
         imgAvatar = (ImageView) convertView.findViewById(R.id.imgAvatar);
         tvUsername = (TextView) convertView.findViewById(R.id.tvUsername);
@@ -96,6 +103,7 @@ public class PostDetailAdapter extends BaseAdapter {
         imgContent = (ImageView) convertView.findViewById(R.id.imgContent);
         imgLike = (ImageView) convertView.findViewById(R.id.imgLike);
         imgComment = (ImageView) convertView.findViewById(R.id.imgComment);
+        txtTopic = (AwesomeTextView) convertView.findViewById(R.id.txtTopic);
 
         Picasso.with(context)
                 .load(post.getAuthor().getAvatarURI())
@@ -108,6 +116,11 @@ public class PostDetailAdapter extends BaseAdapter {
         String imageURI = post.getImageURI();
         tvNumOfLikes.setText(String.valueOf(post.getNumberOfLikes()));
         tvNumOfCmts.setText(String.valueOf(post.getNumberOfComments()));
+
+        Log.d("TienDH", "topic: " + switchTag(post.getTopic()));
+        txtTopic.setText("abc");
+        Log.d("TienDH", "txtTopic: " + txtTopic.toString());
+
         if (imageURI != null && !imageURI.equals("")) {
             Picasso.with(context)
                     .load(Constants.URL_HOST + "/" + post.getImageURI())
@@ -197,6 +210,18 @@ public class PostDetailAdapter extends BaseAdapter {
                 Toast.makeText(context, Constants.SERVER_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private String switchTag(String tag) {
+        switch (tag) {
+            case "study":
+                return context.getString(R.string.icon_study);
+            case "food":
+                return context.getString(R.string.icon_food);
+            case "relax":
+                return context.getString(R.string.icon_relax);
+        }
+        return context.getString(R.string.icon_tag);
     }
 
     private void unlike() {

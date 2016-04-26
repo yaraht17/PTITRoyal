@@ -14,11 +14,13 @@ public class Post implements Serializable {
     private int numberOfLikes;
     private int numberOfComments;
     private boolean isLiked;
+    private String topic;
 
     public Post() {
     }
 
-    public Post(String id, Author author, String time, String content, String imageURI, int numberOfLikes, int numberOfComments, boolean isLiked) {
+
+    public Post(String id, Author author, String time, String content, String imageURI, int numberOfLikes, int numberOfComments, boolean isLiked, String topic) {
         this.id = id;
         this.author = author;
         this.time = time;
@@ -27,6 +29,15 @@ public class Post implements Serializable {
         this.numberOfLikes = numberOfLikes;
         this.numberOfComments = numberOfComments;
         this.isLiked = isLiked;
+        this.topic = topic;
+    }
+
+    public String getTopic() {
+        return topic;
+    }
+
+    public void setTopic(String topic) {
+        this.topic = topic;
     }
 
     public String getId() {

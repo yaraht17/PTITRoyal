@@ -58,31 +58,32 @@ public class NotifyAdapter extends ArrayAdapter<Noti> {
             inflater = (LayoutInflater) this.getContext().getSystemService(
                     Context.LAYOUT_INFLATER_SERVICE);
 
-            row = inflater.inflate(R.layout.list_item_notify, parent, false);
+            row = inflater.inflate(R.layout.item_notify, parent, false);
             viewHolder.tvTitle = (TextView) row.findViewById(R.id.tv_title);
             viewHolder.tvTime = (TextView) row.findViewById(R.id.tv_time);
             viewHolder.imageNotify = (ImageView) row.findViewById(R.id.image_notify);
             viewHolder.relativeLayout = (RelativeLayout) row.findViewById(R.id.item_notify);
             row.setTag(viewHolder);
             String titleNoti = "";
-            if (item.getType()==1) {
+            if (item.getType() == 1) {
                 titleNoti = item.getFromName() + " đã thích bài viết của bạn.";
-            }
-            else{
+            } else {
                 titleNoti = item.getFromName() + " đã bình luận bài viết của bạn.";
             }
             viewHolder.tvTitle.setText(titleNoti);
             viewHolder.tvTime.setText(item.getCreateDate());
-          //  viewHolder.imageNotify ;
+            //  viewHolder.imageNotify ;
             Picasso.with(context)
                     .load(item.getFromAvatar())
                     .placeholder(android.R.drawable.ic_menu_gallery)
                     .error(android.R.drawable.ic_menu_report_image)
                     .into(viewHolder.imageNotify);
             // set color item
-            if(item.getRead()=="false"){
+            if (item.getRead().equals("true")) {
                 Log.d("manh", item.getRead());
                 viewHolder.relativeLayout.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            } else {
+                viewHolder.relativeLayout.setBackgroundColor(Color.parseColor("#EDEFF5"));
             }
 
         } else {
@@ -92,7 +93,7 @@ public class NotifyAdapter extends ArrayAdapter<Noti> {
     }
 
 
-    private  class ViewHolder {
+    private class ViewHolder {
         private TextView tvTitle;
         private TextView tvTime;
         private ImageView imageNotify;

@@ -18,7 +18,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.Random;
-import java.util.Set;
 
 public class MyGcmListenerService extends GcmListenerService {
 
@@ -44,10 +43,6 @@ public class MyGcmListenerService extends GcmListenerService {
         }
         String content = "";
 
-        Set<String> keys = data.keySet();
-        for (String key : keys) {
-            Log.d("TienDH", "key: " + key);
-        }
         String type = data.getString("gcm.notification.type");
         String fromData = data.getString("gcm.notification.from");
         String name = "";
@@ -62,13 +57,13 @@ public class MyGcmListenerService extends GcmListenerService {
 
         //1 like, 2 cmt
         if (Integer.parseInt(type) == 1) {
-            content = name + " like your post";
+            content = name + " thích bài viết của bạn";
         } else if (Integer.parseInt(type) == 2) {
-            content = name + " comment your post";
+            content = name + " bình luận bài viết của bạn";
         }
-
-        sendNotification("PTIT Royal", content);
         Log.d("TienDH", "data: " + data.toString());
+        sendNotification("PTIT Royal", content);
+
 
         // [END_EXCLUDE]
     }
@@ -82,7 +77,7 @@ public class MyGcmListenerService extends GcmListenerService {
 
         Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this)
-                .setSmallIcon(R.drawable.ic_stat_ic_notification)
+                .setSmallIcon(R.mipmap.ic_like)
                 .setContentTitle(title)
                 .setContentText(content)
                 .setAutoCancel(true)
@@ -93,7 +88,7 @@ public class MyGcmListenerService extends GcmListenerService {
                 (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
         Random rd = new Random();
-        int pos = rd.nextInt(10);
+        int pos = rd.nextInt(100);
         notificationManager.notify(pos /* ID of notification */, notificationBuilder.build());
     }
 }

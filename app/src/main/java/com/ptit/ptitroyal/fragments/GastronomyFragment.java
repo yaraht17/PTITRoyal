@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
@@ -44,6 +45,7 @@ public class GastronomyFragment extends Fragment {
     private PostsAdapter adapter;
     private View rootView;
     private SwipyRefreshLayout swipyRefreshGastronomy;
+    private ProgressBar progressBar;
 
     public GastronomyFragment() {
         // Required empty public constructor
@@ -56,6 +58,9 @@ public class GastronomyFragment extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_gastronomy, container, false);
         rvStudyGastronomy = (RecyclerView) rootView.findViewById(R.id.rvGastronomyPosts);
+        progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
+        posts = new ArrayList<>();
+        getNewPost();
         adapter = new PostsAdapter(getActivity(), posts);
         RecyclerView.LayoutManager layoutManager =
                 new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -82,26 +87,26 @@ public class GastronomyFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        posts = new ArrayList<>();
-        getNewPost();
+
     }
 
 
     private void refresh() {
-        Toast.makeText(getActivity(), "Refresh", Toast.LENGTH_SHORT).show();
         APIConnection.getNumberOfNotifications(getActivity(), MainActivity.accessToken);
         getNewPost();
     }
 
     private void loadMore() {
-        Toast.makeText(getActivity(), "Load more", Toast.LENGTH_SHORT).show();
     }
 
     private void getNewPost() {
+
+        progressBar.setVisibility(View.VISIBLE);
         String url = Constants.URL_HOST + "/api/topics/" + Constants.GASTRONOMY + "/posts";
         APIConnection.get(getActivity(), url, MainActivity.accessToken, new VolleyCallback() {
             @Override
             public void onSuccess(JSONObject response) {
+                progressBar.setVisibility(View.INVISIBLE);
                 try {
                     String status = response.getString("status");
                     if (status.equals(Constants.SUCCESS)) {
@@ -110,6 +115,8 @@ public class GastronomyFragment extends Fragment {
                         int n = jsonArray.length();
                         for (int i = 0; i < n; ++i) {
                             posts.add(JSONParser.parsePost(jsonArray.getJSONObject(i)));
+                            Log.d("foo", jsonArray.getJSONObject(i).toString());
+                            Log.d("foo", posts.get(i).getTime());
                         }
                         adapter.notifyDataSetChanged();
                     } else {
@@ -125,6 +132,7 @@ public class GastronomyFragment extends Fragment {
 
             @Override
             public void onError(VolleyError error) {
+                progressBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(getActivity(), Constants.SERVER_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
             }
         });

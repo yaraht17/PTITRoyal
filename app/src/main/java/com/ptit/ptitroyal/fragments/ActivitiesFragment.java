@@ -2,7 +2,6 @@ package com.ptit.ptitroyal.fragments;
 
 
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
@@ -43,6 +43,7 @@ public class ActivitiesFragment extends Fragment {
     private PostsAdapter adapter;
     private View rootView;
     private SwipyRefreshLayout swipyRefreshActivities;
+    private ProgressBar progressBar;
 
     public ActivitiesFragment() {
         // Required empty public constructor
@@ -55,6 +56,9 @@ public class ActivitiesFragment extends Fragment {
         // Inflate the layout for this fragment
         rootView = inflater.inflate(R.layout.fragment_activities, container, false);
         rvActivitiesPosts = (RecyclerView) rootView.findViewById(R.id.rvActivitiesPosts);
+        progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
+        posts = new ArrayList<>();
+        getNewPost();
         adapter = new PostsAdapter(getActivity(), posts);
         RecyclerView.LayoutManager layoutManager =
                 new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false);
@@ -78,29 +82,24 @@ public class ActivitiesFragment extends Fragment {
         return rootView;
     }
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        posts = new ArrayList<>();
-        getNewPost();
-    }
-
 
     private void refresh() {
-        Toast.makeText(getActivity(), "Refresh", Toast.LENGTH_SHORT).show();
         APIConnection.getNumberOfNotifications(getActivity(), MainActivity.accessToken);
         getNewPost();
     }
 
     private void loadMore() {
-        Toast.makeText(getActivity(), "Load more", Toast.LENGTH_SHORT).show();
     }
 
     private void getNewPost() {
+
+        progressBar.setVisibility(View.VISIBLE);
         String url = Constants.URL_HOST + "/api/topics/" + Constants.ACTIVITIES + "/posts";
         APIConnection.get(getActivity(), url, MainActivity.accessToken, new VolleyCallback() {
             @Override
             public void onSuccess(JSONObject response) {
+                progressBar.setVisibility(View.INVISIBLE);
+                Log.d("TienDH", "posts " + response.toString());
                 try {
                     String status = response.getString("status");
                     if (status.equals(Constants.SUCCESS)) {
@@ -124,6 +123,7 @@ public class ActivitiesFragment extends Fragment {
 
             @Override
             public void onError(VolleyError error) {
+                progressBar.setVisibility(View.INVISIBLE);
                 Toast.makeText(getActivity(), Constants.SERVER_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
             }
         });

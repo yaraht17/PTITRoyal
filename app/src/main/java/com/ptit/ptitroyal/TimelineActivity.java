@@ -1,11 +1,15 @@
 package com.ptit.ptitroyal;
 
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.VolleyError;
@@ -17,6 +21,9 @@ import com.ptit.ptitroyal.connect.JSONParser;
 import com.ptit.ptitroyal.connect.VolleyCallback;
 import com.ptit.ptitroyal.data.Constants;
 import com.ptit.ptitroyal.models.Post;
+import com.ptit.ptitroyal.models.User;
+import com.ptit.ptitroyal.view.AwesomeButton;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -24,6 +31,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 public class TimelineActivity extends AppCompatActivity {
 
@@ -32,10 +40,55 @@ public class TimelineActivity extends AppCompatActivity {
     private PostsAdapter adapter;
     private SwipyRefreshLayout swipyRefreshTimline;
 
+    private TextView txtTitle;
+    private AwesomeButton btnLeft;
+    private Button btnRight;
+    private User mUser;
+
+    private ImageView imgCover, imgAvatar;
+    private TextView txtName, txtEmail, txtGender;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_profiles);
+        setContentView(R.layout.activity_profiles);
+
+        mUser = (User) getIntent().getExtras().getSerializable("USER");
+
+        txtTitle = (TextView) findViewById(R.id.txtTitle);
+        btnLeft = (AwesomeButton) findViewById(R.id.btnLeft);
+        btnRight = (Button) findViewById(R.id.btnRight);
+
+        imgAvatar = (ImageView) findViewById(R.id.imgAvatar);
+        imgCover = (ImageView) findViewById(R.id.imgCover);
+        txtName = (TextView) findViewById(R.id.txtName);
+        txtEmail = (TextView) findViewById(R.id.txtEmail);
+        txtGender = (TextView) findViewById(R.id.txtGender);
+
+        btnLeft.setText(getString(R.string.icon_back));
+        btnLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+        txtTitle.setText(mUser.getName());
+        btnRight.setVisibility(View.INVISIBLE);
+        txtName.setText(mUser.getName());
+        txtEmail.setText(mUser.getEmail());
+        txtGender.setText(mUser.getGender());
+
+        Picasso.with(TimelineActivity.this)
+                .load(mUser.getAvatar())
+                .placeholder(R.mipmap.ic_avatar)
+                .error(R.mipmap.ic_avatar)
+                .into(imgAvatar);
+        setCoverPhoto();
+//        Picasso.with(TimelineActivity.this)
+//                .load(mUser.getCover())
+//                .placeholder(R.drawable.nav_header_bg)
+//                .error(R.drawable.nav_header_bg)
+//                .into(imgCover);
 
         rvTimelinePosts = (RecyclerView) findViewById(R.id.rvTimelinePosts);
         posts = new ArrayList<>();
@@ -63,13 +116,12 @@ public class TimelineActivity extends AppCompatActivity {
     }
 
     private void refresh() {
-        Toast.makeText(this, "Refresh", Toast.LENGTH_SHORT).show();
         APIConnection.getNumberOfNotifications(this, MainActivity.accessToken);
         getOwnPost();
     }
 
     private void loadMore() {
-        Toast.makeText(this, "Load more", Toast.LENGTH_SHORT).show();
+
     }
 
     private void getOwnPost() {
@@ -103,5 +155,13 @@ public class TimelineActivity extends AppCompatActivity {
                 Toast.makeText(TimelineActivity.this, Constants.SERVER_ERROR_MESSAGE, Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    private int[] coverImages = {R.drawable.background1, R.drawable.background2, R.drawable.background3, R.drawable.background4};
+
+    private void setCoverPhoto() {
+        Random rd = new Random();
+        int x = rd.nextInt(4);
+        imgCover.setImageResource(coverImages[x]);
     }
 }

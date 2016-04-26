@@ -2,7 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ptit.ptitroyal">
 
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <permission
@@ -74,6 +74,9 @@
         <activity android:name=".TimelineActivity" />
         <activity android:name=".NotificationsActivity" />
         <activity android:name=".PostActivity" />
+        <activity android:name=".PostDetailNotificationActivity" />
+        <activity android:name=".EventActivity" />
+        <activity android:name=".ChatBotActivity"></activity>
     </application>
 
 </manifest>

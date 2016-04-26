@@ -5,8 +5,10 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 
@@ -20,6 +22,7 @@ import com.facebook.FacebookSdk;
 import com.facebook.Profile;
 import com.facebook.ProfileTracker;
 import com.facebook.appevents.AppEventsLogger;
+import com.facebook.login.LoginManager;
 import com.facebook.login.LoginResult;
 import com.facebook.login.widget.LoginButton;
 import com.ptit.ptitroyal.connect.APIConnection;
@@ -38,7 +41,7 @@ public class LoginActivity extends CoreActivity {
 
     private LoginButton btnFacebookLogin;
     private CallbackManager callbackManager;
-
+    private int screenWidth;
     private AccessToken facebookToken;
     private AccessTokenTracker facebookTokenTracker;
 
@@ -48,7 +51,7 @@ public class LoginActivity extends CoreActivity {
     private String accessToken;
 
     private ProgressBar pBar;
-    private LinearLayout layoutLogin;
+    private LinearLayout layoutLogin, layoutLogo;
 
     private User user;
 
@@ -64,8 +67,14 @@ public class LoginActivity extends CoreActivity {
         sharedPreferences = getSharedPreferences(Constants.PTIT_ROYAL_PREFERENCES, Context.MODE_PRIVATE);
         accessToken = sharedPreferences.getString(Constants.ACCESS_TOKEN, "");
 
+        DisplayMetrics displaymetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displaymetrics);
+        screenWidth = displaymetrics.widthPixels;
+
         pBar = (ProgressBar) findViewById(R.id.progressBar);
         layoutLogin = (LinearLayout) findViewById(R.id.layoutLogin);
+        layoutLogo = (LinearLayout) findViewById(R.id.logoLayout);
+
         hideLogin();
         Thread background = new Thread() {
             public void run() {
@@ -75,6 +84,7 @@ public class LoginActivity extends CoreActivity {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
+                layoutLogo.animate().translationY(-(screenWidth / 3)).setDuration(500).setInterpolator(new AccelerateDecelerateInterpolator());
                 checkLogin();
             }
         };
@@ -147,6 +157,7 @@ public class LoginActivity extends CoreActivity {
 
 
     private void requestServer() {
+        layoutLogin.setVisibility(View.INVISIBLE);
         facebookToken = AccessToken.getCurrentAccessToken();
         String s = facebookToken.getToken();
         Log.d("TienDH", " facebook_token: " + s);
@@ -169,6 +180,7 @@ public class LoginActivity extends CoreActivity {
 
                         }
                     } catch (JSONException e) {
+                        LoginManager.getInstance().logOut();
                         e.printStackTrace();
                     }
 
@@ -176,7 +188,7 @@ public class LoginActivity extends CoreActivity {
 
                 @Override
                 public void onError(VolleyError error) {
-
+                    LoginManager.getInstance().logOut();
                     hideDialog();
 
                 }
@@ -187,6 +199,7 @@ public class LoginActivity extends CoreActivity {
     private void intentHome() {
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         startActivity(intent);
+        finish();
     }
 
     private void checkLogin() {
@@ -233,6 +246,7 @@ public class LoginActivity extends CoreActivity {
                         SharedPreferences.Editor editor = sharedPreferences.edit();
                         editor.remove(Constants.ACCESS_TOKEN);
                         editor.apply();
+                        LoginManager.getInstance().logOut();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();

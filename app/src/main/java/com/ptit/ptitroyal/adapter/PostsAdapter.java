@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -19,6 +20,7 @@ import com.ptit.ptitroyal.connect.APIConnection;
 import com.ptit.ptitroyal.connect.VolleyCallback;
 import com.ptit.ptitroyal.data.Constants;
 import com.ptit.ptitroyal.models.Post;
+import com.ptit.ptitroyal.view.AwesomeTextView;
 import com.squareup.picasso.Picasso;
 
 import org.json.JSONException;
@@ -38,7 +40,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
     public class PostViewHolder extends RecyclerView.ViewHolder {
 
         public TextView tvUsername, tvTimePost, tvContent, tvNumOfLikes, tvNumOfCmts;
+        public AwesomeTextView txtTopic;
         public ImageView imgAvatar, imgContent, imgLike, imgComment;
+        public LinearLayout layoutLike, layoutCmt;
 
         public PostViewHolder(View v) {
             super(v);
@@ -51,6 +55,9 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
             imgContent = (ImageView) v.findViewById(R.id.imgContent);
             imgLike = (ImageView) v.findViewById(R.id.imgLike);
             imgComment = (ImageView) v.findViewById(R.id.imgComment);
+            txtTopic = (AwesomeTextView) v.findViewById(R.id.txtTopic);
+            layoutCmt = (LinearLayout) v.findViewById(R.id.layoutCmt);
+            layoutLike = (LinearLayout) v.findViewById(R.id.layoutLike);
         }
     }
 
@@ -83,6 +90,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
         String imageURI = post.getImageURI();
         holder.tvNumOfLikes.setText(String.valueOf(post.getNumberOfLikes()));
         holder.tvNumOfCmts.setText(String.valueOf(post.getNumberOfComments()));
+        holder.txtTopic.setText(switchTag(post.getTopic()));
         if (imageURI != null && !imageURI.equals("")) {
             Picasso.with(context)
                     .load(Constants.URL_HOST + "/" + post.getImageURI())
@@ -100,19 +108,31 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
             holder.imgLike.setImageDrawable(context.getResources().getDrawable(R.mipmap.ic_like_inactive));
         }
 
-        holder.imgLike.setOnClickListener(new View.OnClickListener() {
+        holder.layoutLike.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickLike(postList.get(position), holder);
             }
         });
 
-        holder.imgComment.setOnClickListener(new View.OnClickListener() {
+        holder.layoutCmt.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onClickComment(position);
             }
         });
+    }
+
+    private String switchTag(String tag) {
+        switch (tag) {
+            case "study":
+                return context.getString(R.string.icon_study);
+            case "food":
+                return context.getString(R.string.icon_food);
+            case "relax":
+                return context.getString(R.string.icon_relax);
+        }
+        return context.getString(R.string.icon_tag);
     }
 
     @Override
@@ -130,8 +150,7 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.PostViewHold
 
     private void onClickComment(int position) {
         Intent intent = new Intent(context, PostDetailActivity.class);
-        intent.putExtra("user", MainActivity.user);
-        intent.putExtra("post", postList.get(position));
+        intent.putExtra("postID", postList.get(position).getId());
         context.startActivity(intent);
     }
 

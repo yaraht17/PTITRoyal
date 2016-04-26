@@ -23,12 +23,21 @@
     <string name="icon_settings">&#xf013;</string>
     <string name="icon_edit">&#xf044;</string>
     <string name="icon_arrow">&#xf061;</string>
+    <string name="icon_tag">&#xf02b;</string>
+    <string name="icon_study">&#xf02d;</string>
+    <string name="icon_food">&#xf0f4;</string>
+    <string name="icon_relax">&#xf11b;</string>
 
+    <string name="mic_icon">&#xf130;</string>
+    <string name="send_icon">&#xf1d8;</string>
+
+    <string name="logout_question">Đăng xuất ngay bây giờ?</string>
     <string name="like">Thích</string>
     <string name="comment">Bình luận</string>
     <string name="reply">Trả lời</string>
     <string name="user_name">Username</string>
     <string name="request_error">Xảy ra lỗi, vui lòng thử lại!</string>
+    <string name="icon_camera">&#xf030;</string>
 
     <string-array name="hashtag_array">
         <item>Giải Trí</item>

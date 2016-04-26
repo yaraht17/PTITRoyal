@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorBackground"
+    android:orientation="vertical">
+
+    <include
+        android:id="@+id/actionbar"
+        layout="@layout/actionbar" />
+
+    <RelativeLayout
+        android:id="@+id/contents"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@+id/actionbar"
+        android:layout_marginBottom="60dp">
+
+        <include layout="@layout/list_view" />
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:id="@+id/bot"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="#FFF"
+        android:orientation="horizontal"
+        android:paddingBottom="10dp"
+        android:paddingTop="10dp">
+
+        <com.ptit.ptitroyal.view.AwesomeTextView
+            android:id="@+id/btnVoice"
+            android:layout_width="40dp"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/selector"
+            android:gravity="center"
+            android:text="@string/mic_icon"
+            android:textSize="20dp" />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <EditText
+                android:id="@+id/etChat"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@null"
+                android:hint="Xàm nào các bạn!"
+                android:inputType="text|textMultiLine|textCapSentences"
+                android:scrollbars="vertical" />
+        </LinearLayout>
+
+        <com.ptit.ptitroyal.view.AwesomeTextView
+            android:id="@+id/btnSend"
+            android:layout_width="40dp"
+            android:layout_height="fill_parent"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="10dp"
+            android:background="@drawable/selector"
+            android:gravity="center"
+            android:text="@string/send_icon"
+            android:textSize="20dp" />
+    </LinearLayout>
+
+
+</RelativeLayout>

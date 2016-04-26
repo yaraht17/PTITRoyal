@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/actionbar" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="150dp"
+        android:layout_gravity="bottom">
+
+        <ImageView
+            android:id="@+id/imgCover"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/nav_header_bg"
+            android:scaleType="centerCrop" />
+
+        <ImageView
+            android:id="@+id/imgAvatar"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="20dp"
+            android:scaleType="centerCrop" />
+
+        <TextView
+            android:id="@+id/txtName"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/imgAvatar"
+            android:gravity="center"
+            android:text="Vu Thanh Dat"
+            android:textColor="#fff"
+            android:textSize="18sp" />
+
+
+        <TextView
+            android:id="@+id/txtEmail"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/txtName"
+            android:gravity="center"
+            android:text="tiendh@gmail.com"
+            android:textColor="#fff" />
+
+
+        <TextView
+            android:id="@+id/txtGender"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/txtEmail"
+            android:gravity="center"
+            android:text="Nam"
+            android:textColor="#fff" />
+
+
+    </RelativeLayout>
+
+
+    <com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout
+        android:id="@+id/swipyRefreshTimeline"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="@dimen/space_small"
+        app:srl_direction="both">
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rvTimelinePosts"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+    </com.orangegangsters.github.swipyrefreshlayout.library.SwipyRefreshLayout>
+</LinearLayout>

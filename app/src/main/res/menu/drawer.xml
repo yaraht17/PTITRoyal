@@ -1,28 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/nav_profiles"
+            android:icon="@drawable/ic_user"
+            android:title="Trang cá nhân" />
+        <item
+            android:id="@+id/nav_chat_bot"
+            android:icon="@drawable/ic_message"
+            android:title="Xàm với Royal BOT" />
 
         <item
-            android:id="@+id/navigation_item_home"
-            android:checked="true"
-            android:icon="@drawable/icon_home"
-            android:title="Home" />
+            android:id="@+id/nav_event"
+            android:icon="@drawable/ic_event"
+            android:title="Sự kiện" />
         <item
-            android:id="@+id/navigation_item_profiles"
-            android:icon="@drawable/icon_profile"
-            android:title="Profiles" />
-        <item
-            android:id="@+id/navigation_item_setting"
-            android:icon="@drawable/icon_setting"
-            android:title="Settings" />
-        <item
-            android:id="@+id/navigation_item_about"
-            android:icon="@drawable/icon_about"
-            android:title="About" />
-        <item
-            android:id="@+id/navigation_item_logout"
-            android:icon="@drawable/icon_poweroff"
-            android:title="Log out" />
+            android:id="@+id/nav_logout"
+            android:icon="@drawable/ic_out"
+            android:title="Đăng xuất" />
     </group>
 
 </menu>

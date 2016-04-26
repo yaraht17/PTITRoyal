@@ -1,9 +1,11 @@
 package com.ptit.ptitroyal.models;
 
+import java.io.Serializable;
+
 /**
  * Created by HoangTien on 4/20/16.
  */
-public class User {
+public class User implements Serializable {
 
     private String id;
     private String name;

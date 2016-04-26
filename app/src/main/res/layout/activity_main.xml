@@ -10,25 +10,26 @@
         android:layout_height="match_parent">
 
         <include
-            android:id="@+id/toolbar"
-            layout="@layout/toolbar" />
+            android:id="@+id/actionbar"
+            layout="@layout/actionbar_home"
+            android:layout_width="match_parent"
+            android:layout_height="45dp" />
 
         <LinearLayout
             android:id="@+id/content"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/toolbar"
+            android:layout_below="@+id/actionbar"
             android:orientation="vertical">
 
 
             <com.astuetz.PagerSlidingTabStrip
                 android:id="@+id/tabs"
                 android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_gravity="center"
+                android:layout_height="40dp"
                 android:background="@color/colorPrimary"
                 app:pstsIndicatorColor="@android:color/white"
-                app:pstsIndicatorHeight="5dp"
+                app:pstsIndicatorHeight="3dp"
                 app:pstsShouldExpand="true"
                 app:pstsTabBackground="@color/colorPrimary"
                 app:pstsTabTextColor="@android:color/white" />
@@ -45,7 +46,8 @@
 
                 <LinearLayout
                     android:id="@+id/postStatus"
-                    android:layout_width="wrap_content"
+
+                    android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_alignParentLeft="true"
                     android:layout_marginLeft="10dp"
@@ -64,12 +66,12 @@
                 </LinearLayout>
 
                 <ImageView
-                    android:layout_marginRight="10dp"
-                    android:layout_centerVertical="true"
                     android:id="@+id/imgNotification"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginRight="10dp"
                     android:src="@android:drawable/ic_popup_reminder" />
             </RelativeLayout>
         </LinearLayout>

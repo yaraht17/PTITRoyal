@@ -34,20 +34,28 @@ public class JSONParser {
         int likes = 0, comments = 0;
         boolean liked = false;
         Author author = new Author();
+        String topic = "";
 
         try {
             id = object.getString("id");
             author = parseAuthor(object.getJSONObject("author"));
             content = object.getString("content");
-            image = object.getString("image");
+
+            try {
+                image = object.getString("image");
+            } catch (JSONException e) {
+                e.printStackTrace();
+                image = "";
+            }
             time = (object.getString("create_date"));
             likes = (object.getInt("likes"));
             comments = (object.getInt("comments"));
             liked = (object.getBoolean("liked"));
+            topic = object.getString("topic");
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        Post post = new Post(id, author, time,content, image, likes, comments, liked);
+        Post post = new Post(id, author, time, content, image, likes, comments, liked, topic);
         return post;
     }
 

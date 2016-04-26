@@ -4,12 +4,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="@dimen/space_medium"
-    card:cardBackgroundColor="@android:color/white"
+    card:cardBackgroundColor="@color/feed_bg"
     card:cardCornerRadius="0dp">
 
-    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_marginTop="5dp"
+        android:background="@color/white"
         android:orientation="vertical"
         android:paddingLeft="@dimen/space_small"
         android:paddingRight="@dimen/space_small">
@@ -51,6 +53,15 @@
                 android:textAppearance="?android:attr/textAppearanceSmall"
                 android:textColor="@color/colorSecondaryText" />
 
+            <com.ptit.ptitroyal.view.AwesomeTextView
+                android:id="@+id/txtTopic"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="10dp"
+                android:text="@string/icon_tag"
+                android:textSize="20dp" />
         </RelativeLayout>
 
         <TextView
@@ -70,61 +81,129 @@
             android:adjustViewBounds="true"
             android:scaleType="fitCenter" />
 
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/space_small"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:padding="@dimen/space_small">
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
+            android:padding="5dp">
 
-            <ImageView
-                android:id="@+id/imgLike"
-                android:layout_width="@dimen/button_icon"
-                android:layout_height="@dimen/button_icon"
-                android:src="@mipmap/ic_like" />
-
-            <TextView
-                android:id="@+id/tvNumOfLikes"
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/space_small"
-                android:text="5"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/colorPrimaryText" />
+                android:layout_height="match_parent">
 
-            <TextView
+                <TextView
+                    android:id="@+id/tvNumOfLikes"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/space_small"
+                    android:text="5"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/colorPrimaryText" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/space_small"
+                    android:text="Thích"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/colorSecondaryText" />
+
+            </LinearLayout>
+
+            <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/space_small"
-                android:text="@string/like"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/colorSecondaryText" />
+                android:layout_height="match_parent"
+                android:layout_marginLeft="10dp">
 
-            <ImageView
-                android:id="@+id/imgComment"
-                android:layout_width="@dimen/button_icon"
-                android:layout_height="@dimen/button_icon"
-                android:layout_marginLeft="@dimen/space_large"
-                android:src="@android:drawable/sym_action_chat" />
+                <TextView
+                    android:id="@+id/tvNumOfCmts"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/space_small"
+                    android:text="5"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/colorPrimaryText" />
 
-            <TextView
-                android:id="@+id/tvNumOfCmts"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/space_small"
-                android:text="5"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/colorPrimaryText" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/space_small"
+                    android:text="Bình luận"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/colorSecondaryText" />
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/space_small"
-                android:text="@string/comment"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:textColor="@color/colorSecondaryText" />
+            </LinearLayout>
+
         </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:background="#ccc" />
+
+        <LinearLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/space_small"
+            android:gravity="center"
+            android:orientation="horizontal"
+            android:padding="3dp">
+
+            <LinearLayout
+                android:id="@+id/layoutLike"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/imgLike"
+                    android:layout_width="@dimen/button_icon"
+                    android:layout_height="@dimen/button_icon"
+                    android:src="@mipmap/ic_like" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/space_small"
+                    android:text="Thích"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/colorSecondaryText"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/layoutCmt"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <ImageView
+                    android:id="@+id/imgComment"
+                    android:layout_width="@dimen/button_icon"
+                    android:layout_height="@dimen/button_icon"
+                    android:layout_marginLeft="@dimen/space_large"
+                    android:src="@android:drawable/sym_action_chat" />
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/space_small"
+                    android:text="Bình luận"
+                    android:textAppearance="?android:attr/textAppearanceSmall"
+                    android:textColor="@color/colorSecondaryText"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
 
     </LinearLayout>
 </android.support.v7.widget.CardView>

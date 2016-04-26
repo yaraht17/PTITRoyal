@@ -9,6 +9,7 @@ public class Constants {
     public static final String URL_HOST = "http://40.83.127.97:3000";
     public static final String API_VERIFY_TOKEN = URL_HOST + "/api/access-token/verify";
     public static final String API_LOGIN = URL_HOST + "/api/login";
+    public static final String API_LOGOUT = URL_HOST + "/api/logout";
     public static final String API_GET_POST = URL_HOST + "/api/me/posts";
     public static final String API_PROFILE = URL_HOST + "/api/me/about";
     public static final String API_GCM = URL_HOST + "/api/me/gcm";
@@ -49,5 +50,6 @@ public class Constants {
     //
     public static final String GET_NOTIS = URL_HOST + "/api/me/notis";
     public static final String DO_POST_STATUS = URL_HOST + "/api/topics/" + POST_ID_TOPIC_REPLACE + "/posts";
+
 
 }

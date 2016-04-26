@@ -5,71 +5,89 @@ import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.android.volley.VolleyError;
+import com.ptit.ptitroyal.adapter.SpinnerTopicAdapter;
 import com.ptit.ptitroyal.connect.APIConnection;
 import com.ptit.ptitroyal.connect.VolleyCallback;
+import com.ptit.ptitroyal.cores.CoreActivity;
 import com.ptit.ptitroyal.models.PostContent;
+import com.ptit.ptitroyal.models.Topic;
+import com.ptit.ptitroyal.view.AwesomeButton;
+import com.ptit.ptitroyal.view.AwesomeTextView;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 /**
  * Created by Manh on 4/21/16.
  */
-public class PostActivity extends AppCompatActivity {
+public class PostActivity extends CoreActivity {
     private Spinner spHashtag;
     private EditText edContent;
     private TextView tvHashtag;
-    private ImageView imageSelect;
-    private Button btnPost;
+    private AwesomeTextView imageSelect;
     private ImageView imagePreview;
     private int PICK_IMAGE_REQUEST = 1;
     private String token = MainActivity.accessToken;
 
+    private TextView txtTitle;
+    private AwesomeButton btnLeft;
+    private Button btnRight;
+
     private Bitmap bitmap;
+    private ArrayList<Topic> topics;
+    private SpinnerTopicAdapter spAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.post_status);
-        btnPost = (Button) findViewById(R.id.btn_post);
+        setContentView(R.layout.activity_post_status);
         edContent = (EditText) findViewById(R.id.ed_content);
         tvHashtag = (TextView) findViewById(R.id.tv_hashtag);
-        imageSelect = (ImageView) findViewById(R.id.image_select);
+        imageSelect = (AwesomeTextView) findViewById(R.id.image_select);
         imagePreview = (ImageView) findViewById(R.id.image_preview);
         spHashtag = (Spinner) findViewById(R.id.spiner_hashtag);
-        // Create an ArrayAdapter using the string array and a default spinner layout
-        final ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.hashtag_array, R.layout.item_spinner);
-        // Specify the layout to use when the list of choices appears
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        // Apply the adapter to the spinner
-        spHashtag.setAdapter(adapter);
-        // spHashtag.getSelectedItem();
+        txtTitle = (TextView) findViewById(R.id.txtTitle);
+        btnLeft = (AwesomeButton) findViewById(R.id.btnLeft);
+        btnRight = (Button) findViewById(R.id.btnRight);
+
+        createTopic();
+        spAdapter = new SpinnerTopicAdapter(this, -1, topics);
+
+
+        spAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spHashtag.setAdapter(spAdapter);
         imageSelect.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 selectImage();
             }
         });
+        txtTitle.setText("Đăng lên PTIT Royal");
 
-        btnPost.setOnClickListener(new View.OnClickListener() {
+        btnLeft.setText(getString(R.string.icon_back));
+        btnLeft.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+
+        btnRight.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 try {
@@ -82,9 +100,6 @@ public class PostActivity extends AppCompatActivity {
 
     }
 
-    public void selectHashtag() {
-
-    }
 
     public void selectImage() {
         Intent intent = new Intent();
@@ -107,7 +122,7 @@ public class PostActivity extends AppCompatActivity {
             try {
                 bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), uri);
                 // Log.d(TAG, String.valueOf(bitmap));
-                bitmap = Bitmap.createScaledBitmap(bitmap, bitmap.getWidth() / 4, bitmap.getHeight() / 4, true);
+                bitmap = Bitmap.createScaledBitmap(bitmap, 300, 300, true);
 
                 ImageView imageView = (ImageView) findViewById(R.id.image_preview);
                 imageView.setImageBitmap(bitmap);
@@ -125,44 +140,55 @@ public class PostActivity extends AppCompatActivity {
         return encodedImage;
     }
 
+    private void createTopic() {
+        topics = new ArrayList<>();
+        topics.add(new Topic("Giải trí", getString(R.string.icon_relax)));
+        topics.add(new Topic("Ăn uống", getString(R.string.icon_food)));
+        topics.add(new Topic("Học tập", getString(R.string.icon_study)));
+    }
+
     public void doPostStatus() throws JSONException {
+        String image = "";
 
-
-        String image = getStringImage(bitmap);
-
+        if (bitmap != null) {
+            image = getStringImage(bitmap);
+        }
         String content = edContent.getText().toString();
 
-        String topic = spHashtag.getSelectedItem().toString();
-        Log.d("manh", topic);
+        Topic topicObj = (Topic) spHashtag.getSelectedItem();
+        String topic = topicObj.getName();
+        Log.d("manh", topicObj.getName());
         if (content == "null") return;
-        //topic = "Giải Trí";
-        switch (topic) {
-            case "Giải Trí":
+        switch (topicObj.getName()) {
+            case "Giải trí":
                 topic = "relax";
                 break;
-            case "Ăn Uống":
+            case "Ăn uống":
                 topic = "food";
                 break;
-            case "Học Tập":
+            case "Học tập":
                 topic = "study";
                 break;
         }
         PostContent postContent = new PostContent(content, image, topic);
-
+        showDialog("Đăng bài");
         try {
             APIConnection.doPostStatus(this, postContent, token, new VolleyCallback() {
                 @Override
                 public void onSuccess(JSONObject response) {
                     Log.d("manh", "success");
-                    showToast("Success");
+                    hideDialog();
+                    showToastLong("Đăng bài thành công");
                     //intent
 
+                    finish();
                 }
 
                 @Override
                 public void onError(VolleyError error) {
+                    hideDialog();
                     Log.d("manh", "fail");
-                    showToast("Hãy thử lại");
+                    showToastLong(getString(R.string.request_error));
 
                 }
             });
@@ -171,9 +197,5 @@ public class PostActivity extends AppCompatActivity {
         }
     }
 
-    private void showToast(String error) {
-        Toast.makeText(getApplicationContext(), error,
-                Toast.LENGTH_LONG).show();
-    }
 
 }
